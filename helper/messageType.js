@@ -30,7 +30,19 @@ const messageTypeQueue = async (incomingMessage) => {
   
              await serviceLogic.createBudgets(extractData);
             break;
-
+            case QueueMessageType.CHECK_IS_EXSIST:
+              //console.log("fdhsfhfgjfg")
+              extractData = parsedMessage.data.userId
+    
+               await serviceLogic.checkIsExsist(extractData);
+              break;
+              case QueueMessageType.UPDATE_BUDGETS:
+              //console.log("fdhsfhfgjfg")
+              extractData = parsedMessage.data.updateBudgets
+    
+               await serviceLogic.updateBudgets(extractData);
+              break;
+  
         default:
 
 

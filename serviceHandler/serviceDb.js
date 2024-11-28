@@ -2,16 +2,14 @@ const dbConnection = require("../db/connection-wrapper");
 const authQuery = require("../sql/query/authQuery");
 
 async function createBudgets(budgets) {
-    let sql;
-    let parameters;
 
-        sql = `INSERT INTO budget
+      let sql = `INSERT INTO budget
                (budget ,sum_budget ,user_id)
                VALUES (?,?,?)`;
                const budgetJson = JSON.stringify(budgets.budgetUpdates);
                console.log("Budget JSON:", budgetJson);
                
-        parameters = [
+        let parameters = [
             budgetJson,
             budgets.sumCurrentBudgets,
            
@@ -28,17 +26,30 @@ async function createBudgets(budgets) {
 }
 
 
-
+async function checkIsExsist(userId) {
+    let sql=authQuery.isExsist()
+    
+    let param=[userId];
+    let userIncomes = await dbConnection.executeWithParameters(sql, param);  
+    return userIncomes.length > 0;
+}
+async function updateBudgets(budgets) {
+    let sql=authQuery.updateBudgets;
+ 
+    const budgetJson = JSON.stringify(budgets.budgetUpdates);
+  
+            
+    let parameters = [
+        budgetJson,
+        budgets.sumCurrentBudgets,
+        budgets.userId
+    ];
+    await dbConnection.executeWithParameters(sql, parameters);
+}
 
 async function getSumIncomes(userId) {
 console.log(userId  +" db")
-    let sql = `
-        SELECT SUM(price) AS total_income
-        FROM user_logs
-        WHERE revenue_category IS NOT NULL 
-          AND user_id = ? 
-          AND MONTH(date) = MONTH(CURRENT_DATE) 
-          AND YEAR(date) = YEAR(CURRENT_DATE);`;
+    let sql =arguments.getSumIncomes();
     let parameters=[userId];
     let userIncomes = await dbConnection.executeWithParameters(sql, parameters);   
     if (!userIncomes) {
@@ -53,5 +64,7 @@ console.log(userId  +" db")
 module.exports = {
    
     getSumIncomes,
-    createBudgets
+    createBudgets,
+    updateBudgets,
+    checkIsExsist
 };

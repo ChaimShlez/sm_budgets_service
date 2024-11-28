@@ -6,12 +6,22 @@ const serviceDb = require("./serviceDb");
        console.log(sumIncomes)
     return sumIncomes;
   }
+  async function checkIsExsist(userId) {
+    console.log(userId +  " logic")
+    let isExsist = await serviceDb.checkIsExsist(userId);
+       console.log(isExsist)
+    return isExsist ;
+  }
   
 
 
-  async function createBudgets(Budgets) {
+  async function createBudgets(budgets) {
     
-    await serviceDb.createBudgets(Budgets);
+    await serviceDb.createBudgets(budgets);
+  }
+
+  async function updateBudgets(budgets) {
+      await serviceDb.updateBudgets(budgets)
   }
 
 
@@ -20,5 +30,7 @@ const serviceDb = require("./serviceDb");
   
   module.exports = {
     getSumIncomes,
-    createBudgets
+    createBudgets,
+    checkIsExsist,
+    updateBudgets
   };
