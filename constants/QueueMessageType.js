@@ -1,6 +1,7 @@
 const QueueMessageType = {
  
-  GET_SUM_BUDGETS:'getSumBudgets',
+  GET_BUDGETS: 'getBudgets',
+  GET_SUM_INCOME:'getSumIncome',
   CREATE_BUDGETS:'createBudgets',
   CHECK_IS_EXSIST:'checkIsExsist',
   UPDATE_BUDGETS:'updateBudgets'

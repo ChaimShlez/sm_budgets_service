@@ -1,36 +1,39 @@
 const serviceDb = require("./serviceDb");
 
-  async function  getSumIncomes(userId) {
-    console.log(userId +  " logic")
-    let sumIncomes = await serviceDb.getSumIncomes(userId);
-       console.log(sumIncomes)
-    return sumIncomes;
-  }
-  async function checkIsExsist(userId) {
-    console.log(userId +  " logic")
-    let isExsist = await serviceDb.checkIsExsist(userId);
-       console.log(isExsist)
-    return isExsist ;
-  }
-  
+async function getSumIncome(userId) {
+  console.log(userId + " logic")
+  let sumIncomes = await serviceDb.getSumIncome(userId);
+  console.log(sumIncomes)
+  return sumIncomes;
+}
+
+async function getBudgets(userId) {
+  let budgats = await serviceDb.getBudgets(userId)
+  return budgats;
+}
+async function isExsist(date) {
+  const isExist = await serviceDb.isExsist(date); 
+  return isExist;  
+}
 
 
-  async function createBudgets(budgets) {
-    
-    await serviceDb.createBudgets(budgets);
-  }
+async function createBudgets(budgets) {
 
-  async function updateBudgets(budgets) {
-      await serviceDb.updateBudgets(budgets)
-  }
+  await serviceDb.createBudgets(budgets);
+}
+
+async function updateBudgets(budgets) {
+  await serviceDb.updateBudgets(budgets)
+}
 
 
-  
-  
-  
-  module.exports = {
-    getSumIncomes,
-    createBudgets,
-    checkIsExsist,
-    updateBudgets
-  };
+
+
+
+module.exports = {
+  getSumIncome,
+  createBudgets,
+  isExsist,
+  updateBudgets,
+  getBudgets
+};

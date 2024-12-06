@@ -3,38 +3,21 @@ const authQuery = require("../sql/query/authQuery");
 
 async function createBudgets(budgets) {
 
-      let sql = `INSERT INTO budget
-               (budget ,sum_budget ,user_id)
-               VALUES (?,?,?)`;
-               const budgetJson = JSON.stringify(budgets.budgetUpdates);
-               console.log("Budget JSON:", budgetJson);
-               
+      let sql = authQuery.createBudgets();
+      const budgetJson = JSON.stringify(budgets.budgetUpdates);
+               //const year =date().now
+      console.log("Budget JSON:", budgetJson);     
         let parameters = [
             budgetJson,
             budgets.sumCurrentBudgets,
-           
+            budgets.date,
             budgets.userId
-           
         ];
-    
-        console.log(budgets  +  " client")
-        console.log(parameters  +" param")
-        console.log(sql  +" sql")
-
     await dbConnection.executeWithParameters(sql, parameters);
-   
 }
 
-
-async function checkIsExsist(userId) {
-    let sql=authQuery.isExsist()
-    
-    let param=[userId];
-    let userIncomes = await dbConnection.executeWithParameters(sql, param);  
-    return userIncomes.length > 0;
-}
 async function updateBudgets(budgets) {
-    let sql=authQuery.updateBudgets;
+    let sql=authQuery.updateBudgets();
  
     const budgetJson = JSON.stringify(budgets.budgetUpdates);
   
@@ -46,25 +29,56 @@ async function updateBudgets(budgets) {
     ];
     await dbConnection.executeWithParameters(sql, parameters);
 }
+async function getBudgets(userId) {
+    let sql = authQuery.getBudgets();
+    let parameter = [userId];
+    let budgets = await dbConnection.executeWithParameters(sql, parameter);
 
-async function getSumIncomes(userId) {
+    if (!budgets) {
+        return null;
+    }
+      console.log(budgets)
+    
+      
+    return budgets;
+}
+
+
+async function isExsist(data) {
+    let sql = `
+    SELECT EXISTS (
+        SELECT 1
+        FROM budget
+        WHERE YEAR(date) = ?
+          AND MONTH(date) = ?
+    ) AS isExist;
+    `;
+    console.log(data)
+    let parameters = [new Date(data).getFullYear(), new Date(data).getMonth()];
+    
+    let [rows] = await dbConnection.executeWithParameters(sql, parameters);
+    console.log([rows])
+    return rows;  
+    
+}
+
+async function getSumIncome(userId) {
 console.log(userId  +" db")
-    let sql =arguments.getSumIncomes();
+    let sql =authQuery.getSumIncome();
     let parameters=[userId];
     let userIncomes = await dbConnection.executeWithParameters(sql, parameters);   
     if (!userIncomes) {
         return null;
     }
-    console.log(userIncomes)
-    console.log(parameters)
-    console.log(sql)
+    
     return userIncomes; 
 }
  
 module.exports = {
    
-    getSumIncomes,
+    getSumIncome,
     createBudgets,
     updateBudgets,
-    checkIsExsist
+    getBudgets,
+    isExsist
 };

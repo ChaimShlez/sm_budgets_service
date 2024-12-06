@@ -17,25 +17,31 @@ const messageTypeQueue = async (incomingMessage) => {
       console.log(parsedMessage)
       switch (type) {
 
-        case QueueMessageType.GET_SUM_BUDGETS:
+        case QueueMessageType.GET_SUM_INCOME:
           console.log("fdhsfhfgjfg")
           extractData = parsedMessage.data.userId
 
-          response = await serviceLogic.getSumIncomes(extractData);
+          response = await serviceLogic.getSumIncome(extractData);
           break;
+          case QueueMessageType.GET_BUDGETS:
+          console.log("fdhsfhfgjfg")
+          extractData = parsedMessage.data.userId
 
+          response = await serviceLogic.getBudgets(extractData);
+          break;
+          case QueueMessageType.CHECK_IS_EXSIST:
+            console.log("fdhsfhfgjfg")
+            extractData = parsedMessage.data.userId
+  
+            response = await serviceLogic.isExsist(extractData);
+            break;
           case QueueMessageType.CREATE_BUDGETS:
             console.log("fdhsfhfgjfg")
             extractData = parsedMessage.data.userBudgets
   
              await serviceLogic.createBudgets(extractData);
             break;
-            case QueueMessageType.CHECK_IS_EXSIST:
-              //console.log("fdhsfhfgjfg")
-              extractData = parsedMessage.data.userId
-    
-               await serviceLogic.checkIsExsist(extractData);
-              break;
+            
               case QueueMessageType.UPDATE_BUDGETS:
               //console.log("fdhsfhfgjfg")
               extractData = parsedMessage.data.updateBudgets
